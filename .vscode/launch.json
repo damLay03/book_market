@@ -13,7 +13,22 @@
         "--flavor",
         "development",
         "--target",
-        "lib/main_development.dart"
+        "lib/main_development.dart",
+        "--dart-define-from-file",
+        "dart_defines.development.json"
+      ]
+    },
+    {
+      "name": "Launch development (Chrome)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "program": "lib/main_development.dart",
+      "toolArgs": [
+        "--target",
+        "lib/main_development.dart",
+        "--dart-define-from-file",
+        "dart_defines.development.json"
       ]
     },
     {
@@ -21,14 +36,28 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main_staging.dart",
-      "toolArgs": ["--flavor", "staging", "--target", "lib/main_staging.dart"]
+      "toolArgs": [
+        "--flavor",
+        "staging",
+        "--target",
+        "lib/main_staging.dart",
+        "--dart-define-from-file",
+        "dart_defines.staging.json"
+      ]
     },
     {
       "name": "Launch production",
       "request": "launch",
       "type": "dart",
       "program": "lib/main_production.dart",
-      "toolArgs": ["--flavor", "production", "--target", "lib/main_production.dart"]
+      "toolArgs": [
+        "--flavor",
+        "production",
+        "--target",
+        "lib/main_production.dart",
+        "--dart-define-from-file",
+        "dart_defines.production.json"
+      ]
     },
     {
       "name": "Debug Current Widget Test Visually",

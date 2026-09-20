@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:book_market/core/theme/app_breakpoints.dart';
+import 'package:book_market/core/theme/app_spacing.dart';
 import 'package:book_market/features/catalog/catalog.dart';
 import 'package:book_market/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
 class CatalogPage extends StatefulWidget {
   const new({super.key});
@@ -36,7 +37,7 @@ class _CatalogPageState extends State<CatalogPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.md),
             child: SearchBar(
               controller: _searchController,
               hintText: l10n.catalogSearchHint,
@@ -90,24 +91,40 @@ class _BookList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currency = NumberFormat.simpleCurrency(
-      locale: Localizations.localeOf(context).toLanguageTag(),
-    );
     return RefreshIndicator(
       onRefresh: context.read<CatalogCubit>().load,
-      child: ListView.separated(
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-        itemCount: books.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 8),
-        itemBuilder: (context, index) {
-          final book = books[index];
-          return Card(
-            child: ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.menu_book)),
-              title: Text(book.title),
-              subtitle: Text(book.author),
-              trailing: Text(currency.format(book.price)),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final horizontalPadding =
+              constraints.maxWidth < AppBreakpoints.compact
+              ? AppSpacing.md
+              : AppSpacing.lg;
+          final padding = EdgeInsets.fromLTRB(
+            horizontalPadding,
+            0,
+            horizontalPadding,
+            AppSpacing.lg,
+          );
+
+          if (constraints.maxWidth < AppBreakpoints.compact) {
+            return ListView.separated(
+              padding: padding,
+              itemCount: books.length,
+              separatorBuilder: (_, _) => const SizedBox(height: AppSpacing.xs),
+              itemBuilder: (context, index) => BookCard(book: books[index]),
+            );
+          }
+
+          return GridView.builder(
+            padding: padding,
+            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 440,
+              mainAxisExtent: 112,
+              crossAxisSpacing: AppSpacing.md,
+              mainAxisSpacing: AppSpacing.md,
             ),
+            itemCount: books.length,
+            itemBuilder: (context, index) => BookCard(book: books[index]),
           );
         },
       ),
@@ -163,16 +180,16 @@ class _StatusView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Center(
     child: Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 56),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.md),
           Text(title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.xs),
           Text(message, textAlign: TextAlign.center),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.md),
           FilledButton(onPressed: onAction, child: Text(actionLabel)),
         ],
       ),

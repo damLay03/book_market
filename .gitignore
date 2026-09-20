@@ -45,6 +45,7 @@ unlinked_spec.ds
 dart_defines.json
 dart_defines.*.json
 !dart_defines.example.json
+!dart_defines.*.example.json
 
 # Android related
 **/android/**/gradle-wrapper.jar

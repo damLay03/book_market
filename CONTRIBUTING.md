@@ -2,7 +2,7 @@
 
 ## Branches and commits
 
-- Branch from `develop` using `feature/<ticket>-short-name`,
+- Branch from `main` using `feature/<ticket>-short-name`,
   `fix/<ticket>-short-name`, or `chore/<short-name>`.
 - Use Conventional Commits, for example `feat(catalog): add book filters`.
 - Keep pull requests small, reviewable, and focused on one outcome.
@@ -11,7 +11,15 @@
 
 1. Install FVM and run `fvm install`.
 2. Run `fvm flutter pub get`.
-3. Copy `dart_defines.example.json` to `dart_defines.json` and set local values.
+3. Copy the environment samples and set local values:
+
+   ```sh
+   cp dart_defines.example.json dart_defines.development.json
+   cp dart_defines.staging.example.json dart_defines.staging.json
+   cp dart_defines.production.example.json dart_defines.production.json
+   ```
+
+   Production must use HTTPS and cannot enable `USE_FAKE_DATA`.
 4. Run the development flavor as documented in the README.
 
 Do not commit `dart_defines.json`, signing keys, service-account files, or

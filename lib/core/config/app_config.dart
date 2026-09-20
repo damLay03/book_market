@@ -1,7 +1,9 @@
 import 'package:book_market/core/config/app_flavor.dart';
 
 class AppConfig {
-  const new({
+  // Named private constructors still require the class name in Dart.
+  // ignore: unnecessary_type_name_in_constructor
+  const AppConfig._({
     required this.flavor,
     required this.apiBaseUrl,
     required this.connectTimeout,
@@ -32,7 +34,31 @@ class AppConfig {
       AppFlavor.production => '',
     };
 
-    final apiUrl = configuredUrl.isEmpty ? fallbackUrl : configuredUrl;
+    return AppConfig.fromValues(
+      flavor: flavor,
+      apiBaseUrl: configuredUrl.isEmpty ? fallbackUrl : configuredUrl,
+      connectTimeoutMs: connectTimeoutMs,
+      receiveTimeoutMs: receiveTimeoutMs,
+      enableNetworkLogs: configuredNetworkLogs,
+      useFakeData: configuredFakeData.isEmpty
+          ? flavor == AppFlavor.development
+          : configuredFakeData.toLowerCase() == 'true',
+    );
+  }
+
+  factory fromValues({
+    required AppFlavor flavor,
+    required String apiBaseUrl,
+    required int connectTimeoutMs,
+    required int receiveTimeoutMs,
+    required bool enableNetworkLogs,
+    required bool useFakeData,
+  }) {
+    if (flavor.isProduction && useFakeData) {
+      throw StateError('USE_FAKE_DATA cannot be enabled in Production.');
+    }
+
+    final apiUrl = apiBaseUrl;
     if (apiUrl.isEmpty) {
       throw StateError(
         'API_BASE_URL is required for ${flavor.label}. '
@@ -50,15 +76,13 @@ class AppConfig {
       throw StateError('API_BASE_URL is not a valid URL for ${flavor.label}.');
     }
 
-    return AppConfig(
+    return AppConfig._(
       flavor: flavor,
       apiBaseUrl: parsedApiUrl,
-      connectTimeout: const Duration(milliseconds: connectTimeoutMs),
-      receiveTimeout: const Duration(milliseconds: receiveTimeoutMs),
-      enableNetworkLogs: !flavor.isProduction && configuredNetworkLogs,
-      useFakeData: configuredFakeData.isEmpty
-          ? flavor == AppFlavor.development
-          : configuredFakeData.toLowerCase() == 'true',
+      connectTimeout: Duration(milliseconds: connectTimeoutMs),
+      receiveTimeout: Duration(milliseconds: receiveTimeoutMs),
+      enableNetworkLogs: !flavor.isProduction && enableNetworkLogs,
+      useFakeData: useFakeData,
     );
   }
 

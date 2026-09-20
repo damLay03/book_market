@@ -17,5 +17,19 @@ void main() {
         throwsA(isA<StateError>()),
       );
     });
+
+    test('rejects fake data in production', () {
+      expect(
+        () => AppConfig.fromValues(
+          flavor: AppFlavor.production,
+          apiBaseUrl: 'https://api.example.com/v1',
+          connectTimeoutMs: 15000,
+          receiveTimeoutMs: 15000,
+          enableNetworkLogs: false,
+          useFakeData: true,
+        ),
+        throwsA(isA<StateError>()),
+      );
+    });
   });
 }

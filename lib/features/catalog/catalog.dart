@@ -5,3 +5,4 @@ export 'domain/entities/book.dart';
 export 'domain/repositories/catalog_repository.dart';
 export 'presentation/cubit/catalog_cubit.dart';
 export 'presentation/view/catalog_page.dart';
+export 'presentation/widgets/book_card.dart';

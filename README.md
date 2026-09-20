@@ -14,6 +14,7 @@ Production-oriented Flutter frontend starter for the Book Market team.
 - ARB localization, Material 3, strict analysis, tests, and CI
 
 Architecture details live in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Shared UI rules live in [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md).
 All contributors and coding agents must follow [AGENTS.md](AGENTS.md).
 
 ## First-time setup
@@ -26,9 +27,18 @@ fvm dart run build_runner build
 
 If FVM is unavailable, install Flutter 3.47.5 and omit the `fvm` prefix.
 
-Copy `dart_defines.example.json` to the ignored `dart_defines.json`, then put
-the URL for your local backend in that file. Never put a secret in a Flutter
-client or commit the local file.
+Create the ignored files used by the VS Code launch profiles:
+
+```sh
+cp dart_defines.example.json dart_defines.development.json
+cp dart_defines.staging.example.json dart_defines.staging.json
+cp dart_defines.production.example.json dart_defines.production.json
+```
+
+Replace the sample URLs for real environments. Development intentionally uses
+deterministic fake Catalog data; staging and production samples do not.
+Production rejects fake data and requires HTTPS. Never put a secret in a
+Flutter client or commit a local define file.
 
 ## Run
 
@@ -36,23 +46,29 @@ client or commit the local file.
 # Development
 fvm flutter run --flavor development \
   --target lib/main_development.dart \
-  --dart-define-from-file=dart_defines.json
+  --dart-define-from-file=dart_defines.development.json
 
 # Staging
 fvm flutter run --flavor staging \
   --target lib/main_staging.dart \
-  --dart-define-from-file=dart_defines.json
+  --dart-define-from-file=dart_defines.staging.json
 
 # Production
 fvm flutter run --flavor production \
   --target lib/main_production.dart \
-  --dart-define-from-file=dart_defines.json
+  --dart-define-from-file=dart_defines.production.json
+
+# Web (development; web does not use the native flavor flag)
+fvm flutter run -d chrome \
+  --target lib/main_development.dart \
+  --dart-define-from-file=dart_defines.development.json
 ```
 
-VS Code launch profiles are included. Without a define file, development uses
-`http://10.0.2.2:8080/api/v1` and the deterministic fake Catalog repository.
-Staging and production fail fast unless `API_BASE_URL` is supplied; production
-also requires HTTPS.
+VS Code launch profiles are included for native targets and development on
+Chrome. Without a define file, development uses `http://10.0.2.2:8080/api/v1`
+and the deterministic fake Catalog repository. Staging and production fail
+fast unless `API_BASE_URL` is supplied; production also requires HTTPS and
+rejects `USE_FAKE_DATA=true`.
 
 ## Quality gate
 
@@ -65,7 +81,7 @@ fvm flutter test --coverage --test-randomize-ordering-seed random
 ```
 
 The same checks run on pull requests. CI also performs an Android development
-APK smoke build and rejects line coverage below 80%.
+APK and web smoke builds and rejects line coverage below 80%.
 
 ## Adding product code
 
