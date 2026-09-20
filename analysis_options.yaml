@@ -1,0 +1,23 @@
+include:
+  - package:very_good_analysis/analysis_options.yaml
+  - package:bloc_lint/recommended.yaml
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+  exclude:
+    - lib/l10n/gen/*
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - '**/*.freezed.dart'
+    - '**/*.g.dart'
+linter:
+  rules:
+    always_use_package_imports: true
+    avoid_dynamic_calls: true
+    discarded_futures: true
+    prefer_final_locals: true
+    public_member_api_docs: false

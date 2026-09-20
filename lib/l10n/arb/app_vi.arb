@@ -1,0 +1,28 @@
+{
+  "@@locale": "vi",
+  "appTitle": "Chợ Sách",
+  "counterAppBarTitle": "Bộ đếm mẫu",
+  "settingsTitle": "Cài đặt",
+  "settingsReady": "Nền tảng cài đặt đã sẵn sàng.",
+  "pageNotFoundTitle": "Không tìm thấy trang",
+  "pageNotFoundMessage": "Trang bạn yêu cầu không tồn tại.",
+  "incrementTooltip": "Tăng",
+  "decrementTooltip": "Giảm",
+  "catalogTitle": "Danh mục sách",
+  "catalogSearchHint": "Tìm theo tên sách hoặc tác giả",
+  "catalogEmptyTitle": "Không tìm thấy sách",
+  "catalogEmptyMessage": "Hãy thử tên sách hoặc tác giả khác.",
+  "catalogErrorTitle": "Không thể tải danh sách sách",
+  "catalogErrorMessage": "Kiểm tra kết nối rồi thử lại.",
+  "clearSearch": "Xóa tìm kiếm",
+  "retry": "Thử lại",
+  "themeMode": "Giao diện",
+  "themeSystem": "Theo hệ thống",
+  "themeLight": "Sáng",
+  "themeDark": "Tối",
+  "currentCount": "Giá trị hiện tại: {count}",
+  "@currentCount": {
+    "description": "Nhãn trợ năng cho giá trị của bộ đếm mẫu",
+    "placeholders": {"count": {"type": "int"}}
+  }
+}

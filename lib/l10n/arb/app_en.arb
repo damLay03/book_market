@@ -1,0 +1,28 @@
+{
+  "@@locale": "en",
+  "appTitle": "Book Market",
+  "counterAppBarTitle": "Reference Counter",
+  "settingsTitle": "Settings",
+  "settingsReady": "The settings foundation is ready.",
+  "pageNotFoundTitle": "Page not found",
+  "pageNotFoundMessage": "The requested page does not exist.",
+  "incrementTooltip": "Increment",
+  "decrementTooltip": "Decrement",
+  "catalogTitle": "Book catalog",
+  "catalogSearchHint": "Search by title or author",
+  "catalogEmptyTitle": "No books found",
+  "catalogEmptyMessage": "Try a different title or author.",
+  "catalogErrorTitle": "Could not load books",
+  "catalogErrorMessage": "Check your connection and try again.",
+  "clearSearch": "Clear search",
+  "retry": "Retry",
+  "themeMode": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "currentCount": "Current count: {count}",
+  "@currentCount": {
+    "description": "Accessibility label for the reference counter value",
+    "placeholders": {"count": {"type": "int"}}
+  }
+}

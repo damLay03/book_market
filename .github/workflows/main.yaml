@@ -1,0 +1,76 @@
+name: quality-gate
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.5"
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Generate code
+        run: dart run build_runner build
+      - name: Ensure generated files are committed
+        run: git diff --exit-code
+      - name: Analyze
+        run: flutter analyze --fatal-infos
+      - name: Bloc lint
+        run: dart run bloc_tools:bloc lint .
+      - name: Test
+        run: flutter test --coverage --test-randomize-ordering-seed random
+      - name: Enforce 80% line coverage
+        run: |
+          awk -F: '
+            /^LF:/ { total += $2 }
+            /^LH:/ { hit += $2 }
+            END {
+              coverage = total == 0 ? 0 : (hit * 100 / total)
+              printf "Line coverage: %.2f%%\n", coverage
+              exit coverage < 80
+            }
+          ' coverage/lcov.info
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/lcov.info
+
+  android-smoke-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.5"
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - name: Install Flutter-compatible Android NDK
+        run: sdkmanager "ndk;28.2.13676358"
+      - name: Build development APK
+        run: >-
+          flutter build apk --debug
+          --flavor development
+          --target lib/main_development.dart
